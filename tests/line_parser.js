@@ -22,7 +22,7 @@ each(
     },
     {
       title: 'trim_line_path',
-      output: [{ for: '/path', values: {} }],
+      output: [],
     },
     {
       title: 'trim_line_values',
@@ -42,7 +42,7 @@ each(
     },
     {
       title: 'no_colon',
-      output: [{ for: '/path', values: {} }],
+      output: [],
     },
     {
       title: 'trim_name',

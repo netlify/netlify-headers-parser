@@ -9,7 +9,7 @@ const normalizeHeaders = function (headers) {
     throw new TypeError(`Headers must be an array not: ${headers}`)
   }
 
-  return headers.map(parseHeader)
+  return headers.map(parseHeader).filter(Boolean)
 }
 
 const parseHeader = function (header, index) {
@@ -29,7 +29,17 @@ ${error.message}`)
 // Parse a single `headers` object
 const parseHeaderObject = function ({ for: rawPath, values: rawValues }) {
   const path = normalizePath(rawPath)
+
+  if (rawValues === undefined) {
+    return
+  }
+
   const values = normalizeValues(rawValues)
+
+  if (Object.keys(values).length === 0) {
+    return
+  }
+
   return { for: path, values }
 }
 
@@ -52,10 +62,6 @@ const normalizePath = function (rawPath) {
 
 // Normalize and validate the `values` field
 const normalizeValues = function (rawValues) {
-  if (rawValues === undefined) {
-    throw new TypeError('Missing "values" field')
-  }
-
   if (!isPlainObj(rawValues)) {
     throw new TypeError(`"values" must be an object not: ${rawValues}`)
   }

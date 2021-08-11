@@ -40,6 +40,10 @@ each(
       title: 'multiple_values',
       output: [{ for: '/path', values: { test: 'one,two' } }],
     },
+    {
+      title: 'values_undefined',
+      output: [],
+    },
   ],
   ({ title }, { fixtureName = title, output }) => {
     test(`Parses netlify.toml headers | ${title}`, async (t) => {
@@ -56,7 +60,6 @@ each(
     { title: 'invalid_for_undefined', errorMessage: /Missing "for"/ },
     { title: 'invalid_for_string', errorMessage: /must be a string/ },
     { title: 'invalid_for_path', errorMessage: /must start with "\/"/ },
-    { title: 'invalid_values_undefined', errorMessage: /Missing "values"/ },
     { title: 'invalid_values_object', errorMessage: /must be an object/ },
     { title: 'invalid_value_name', errorMessage: /Empty header name/ },
     { title: 'invalid_value_string', errorMessage: /must be a string/ },
