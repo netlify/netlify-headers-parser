@@ -53,11 +53,7 @@ const normalizePath = function (rawPath) {
     throw new TypeError(`"for" must be a string not: ${rawPath}`)
   }
 
-  const path = rawPath.trim()
-  if (!path.startsWith('/')) {
-    throw new Error(`"for" must start with "/": ${path}`)
-  }
-  return path
+  return rawPath.trim()
 }
 
 // Normalize and validate the `values` field
