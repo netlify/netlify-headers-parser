@@ -1,26 +1,30 @@
 const isPlainObj = require('is-plain-obj')
 const mapObj = require('map-obj')
 
+const { splitResults } = require('./results')
+
 // Validate and normalize an array of `headers` objects.
 // This step is performed after `headers` have been parsed from either
 // `netlify.toml` or `_headerss`.
 const normalizeHeaders = function (headers) {
   if (!Array.isArray(headers)) {
-    throw new TypeError(`Headers must be an array not: ${headers}`)
+    const error = new TypeError(`Headers must be an array not: ${headers}`)
+    return splitResults([error])
   }
 
-  return headers.map(parseHeader).filter(Boolean)
+  const results = headers.map(parseHeader).filter(Boolean)
+  return splitResults(results)
 }
 
 const parseHeader = function (header, index) {
   if (!isPlainObj(header)) {
-    throw new TypeError(`Header must be an object not: ${header}`)
+    return new TypeError(`Header must be an object not: ${header}`)
   }
 
   try {
     return parseHeaderObject(header)
   } catch (error) {
-    throw new Error(`Could not parse header number ${index + 1}:
+    return new Error(`Could not parse header number ${index + 1}:
   ${JSON.stringify(header)}
 ${error.message}`)
   }

@@ -58,7 +58,9 @@ each(
   ],
   ({ title }, { fileFixtureNames, configFixtureName, output }) => {
     test(`Parses netlify.toml and _headers | ${title}`, async (t) => {
-      t.deepEqual(await parseHeaders({ fileFixtureNames, configFixtureName }), output)
+      const { headers, errors } = await parseHeaders({ fileFixtureNames, configFixtureName })
+      t.is(errors.length, 0)
+      t.deepEqual(headers, output)
     })
   },
 )

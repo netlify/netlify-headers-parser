@@ -4,6 +4,8 @@ const { promisify } = require('util')
 const pathExists = require('path-exists')
 const { parse: loadToml } = require('toml')
 
+const { splitResults } = require('./results')
+
 const pReadFile = promisify(readFile)
 
 // Parse `headers` field in "netlify.toml" to an array of objects.
@@ -11,11 +13,11 @@ const pReadFile = promisify(readFile)
 // normalizes it.
 const parseConfigHeaders = async function (netlifyConfigPath) {
   if (!(await pathExists(netlifyConfigPath))) {
-    return []
+    return splitResults([])
   }
 
-  const { headers = [] } = await parseConfig(netlifyConfigPath)
-  return headers
+  const headers = await parseConfig(netlifyConfigPath)
+  return splitResults(headers)
 }
 
 // Load the configuration file and parse it (TOML)
@@ -24,9 +26,13 @@ const parseConfig = async function (configPath) {
     const configString = await pReadFile(configPath, 'utf8')
     const config = loadToml(configString)
     // Convert `null` prototype objects to normal plain objects
-    return JSON.parse(JSON.stringify(config))
+    const { headers = [] } = JSON.parse(JSON.stringify(config))
+    if (!Array.isArray(headers)) {
+      throw new TypeError(`"headers" must be an array`)
+    }
+    return headers
   } catch (error) {
-    throw new Error(`Could not parse configuration file: ${error}`)
+    return [new Error(`Could not parse configuration file: ${error}`)]
   }
 }
 

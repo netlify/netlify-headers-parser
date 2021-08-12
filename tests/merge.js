@@ -111,8 +111,10 @@ each(
     },
   ],
   ({ title }, { fileHeaders, configHeaders, output }) => {
-    test(`Merges _headers with netlify.toml headers | ${title}`, (t) => {
-      t.deepEqual(mergeHeaders({ fileHeaders, configHeaders }), output)
+    test(`Merges _headers with netlify.toml headers | ${title}`, async (t) => {
+      const { headers, errors } = await mergeHeaders({ fileHeaders, configHeaders })
+      t.is(errors.length, 0)
+      t.deepEqual(headers, output)
     })
   },
 )
@@ -124,7 +126,10 @@ each(
   ],
   ({ title }, { fileHeaders, configHeaders, errorMessage }) => {
     test(`Validate syntax errors | ${title}`, async (t) => {
-      await t.throws(mergeHeaders.bind(undefined, { fileHeaders, configHeaders }), errorMessage)
+      const { headers, errors } = await mergeHeaders({ fileHeaders, configHeaders })
+      t.is(headers.length, 0)
+      // eslint-disable-next-line max-nested-callbacks
+      t.true(errors.some((error) => errorMessage.test(error.message)))
     })
   },
 )

@@ -6,8 +6,9 @@ const { parseFileHeaders, normalizeHeaders } = require('..')
 const FIXTURES_DIR = `${__dirname}/fixtures`
 
 const parseHeaders = async function (fixtureName) {
-  const headers = await parseFileHeaders(`${FIXTURES_DIR}/headers_file/${fixtureName}`)
-  return normalizeHeaders(headers)
+  const { headers, errors: parseErrors } = await parseFileHeaders(`${FIXTURES_DIR}/headers_file/${fixtureName}`)
+  const { headers: normalizedHeaders, errors: normalizeErrors } = normalizeHeaders(headers)
+  return { headers: normalizedHeaders, errors: [...parseErrors, ...normalizeErrors] }
 }
 
 each(
@@ -59,7 +60,9 @@ each(
   ],
   ({ title }, { fixtureName = title, output }) => {
     test(`Parses _headers | ${title}`, async (t) => {
-      t.deepEqual(await parseHeaders(fixtureName), output)
+      const { headers, errors } = await parseHeaders(fixtureName)
+      t.is(errors.length, 0)
+      t.deepEqual(headers, output)
     })
   },
 )
@@ -72,7 +75,10 @@ each(
   ],
   ({ title }, { fixtureName = title, errorMessage }) => {
     test(`Validate syntax errors | ${title}`, async (t) => {
-      await t.throwsAsync(parseHeaders(fixtureName), errorMessage)
+      const { headers, errors } = await parseHeaders(fixtureName)
+      t.is(headers.length, 0)
+      // eslint-disable-next-line max-nested-callbacks
+      t.true(errors.some((error) => errorMessage.test(error.message)))
     })
   },
 )

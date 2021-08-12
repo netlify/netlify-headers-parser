@@ -3,17 +3,23 @@ const { promisify } = require('util')
 
 const pathExists = require('path-exists')
 
+const { splitResults } = require('./results')
+
 const readFileAsync = promisify(fs.readFile)
 
 // Parse `_headers` file to an array of objects following the same syntax as
 // the `headers` property in `netlify.toml`
 const parseFileHeaders = async function (headersFile) {
   if (!(await pathExists(headersFile))) {
-    return []
+    return splitResults([])
   }
 
   const text = await readFileAsync(headersFile, 'utf-8')
-  return text.split('\n').map(normalizeLine).filter(hasHeader).map(parseLine).filter(Boolean).reduce(reduceLine, [])
+  const results = text.split('\n').map(normalizeLine).filter(hasHeader).map(parseLine).filter(Boolean)
+  const { headers, errors: parseErrors } = splitResults(results)
+  const { headers: reducedHeaders, errors: reducedErrors } = headers.reduce(reduceLine, { headers: [], errors: [] })
+  const errors = [...parseErrors, ...reducedErrors]
+  return { headers: reducedHeaders, errors }
 }
 
 const normalizeLine = function (line, index) {
@@ -28,7 +34,7 @@ const parseLine = function ({ line, index }) {
   try {
     return parseHeaderLine(line)
   } catch (error) {
-    throw new Error(`Could not parse header line ${index + 1}:
+    return new Error(`Could not parse header line ${index + 1}:
   ${line}
 ${error.message}`)
   }
@@ -65,20 +71,22 @@ const isPathLine = function (line) {
 
 const HEADER_SEPARATOR = ':'
 
-const reduceLine = function (headers, { path, name, value }) {
+const reduceLine = function ({ headers, errors }, { path, name, value }) {
   if (path !== undefined) {
-    return [...headers, { for: path, values: {} }]
+    return { headers: [...headers, { for: path, values: {} }], errors }
   }
 
   if (headers.length === 0) {
-    throw new Error(`Path should come before headers`)
+    const error = new Error(`Path should come before header "${name}"`)
+    return { headers, errors: [...errors, error] }
   }
 
   const previousHeaders = headers.slice(0, -1)
   const currentHeader = headers[headers.length - 1]
   const { values } = currentHeader
   const newValue = values[name] === undefined ? value : `${values[name]},${value}`
-  return [...previousHeaders, { ...currentHeader, values: { ...values, [name]: newValue } }]
+  const newHeaders = [...previousHeaders, { ...currentHeader, values: { ...values, [name]: newValue } }]
+  return { headers: newHeaders, errors }
 }
 
 module.exports = { parseFileHeaders }
