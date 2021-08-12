@@ -30,20 +30,29 @@ each(
     },
     {
       title: 'only_files',
-      fileFixtureNames: ['success', 'success'],
+      fileFixtureNames: ['success', 'success_two'],
       output: [
         { for: '/path', values: { test: 'one' } },
-        { for: '/path', values: { test: 'one' } },
+        { for: '/path', values: { test: 'two' } },
       ],
     },
     {
       title: 'both_config_files',
-      fileFixtureNames: ['success', 'success'],
+      fileFixtureNames: ['success_two'],
       configFixtureName: 'success',
       output: [
+        { for: '/path', values: { test: 'two' } },
         { for: '/path', values: { test: 'one' } },
+      ],
+    },
+    {
+      title: 'duplicates',
+      fileFixtureNames: ['duplicate'],
+      configFixtureName: 'duplicate',
+      output: [
+        { for: '/path', values: { test: 'three' } },
         { for: '/path', values: { test: 'one' } },
-        { for: '/path', values: { test: 'one' } },
+        { for: '/path', values: { test: 'two' } },
       ],
     },
   ],

@@ -1,4 +1,4 @@
-const { inspect } = require('util')
+const { inspect, isDeepStrictEqual } = require('util')
 
 // Merge headers from `_headers` with the ones from `netlify.toml`.
 // When:
@@ -17,13 +17,21 @@ const { inspect } = require('util')
 const mergeHeaders = function ({ fileHeaders = [], configHeaders = [] }) {
   validateArray(fileHeaders)
   validateArray(configHeaders)
-  return [...fileHeaders, ...configHeaders]
+  return [...fileHeaders, ...configHeaders].filter(isUniqueHeader)
 }
 
 const validateArray = function (headers) {
   if (!Array.isArray(headers)) {
     throw new TypeError(`Headers should be an array: ${inspect(headers, { colors: false })}`)
   }
+}
+
+// Remove duplicates. This is especially likely considering `fileHeaders` might
+// have been previously merged to `configHeaders`, which happens when
+// `netlifyConfig.headers` is modified by plugins.
+// The latest duplicate value is the one kept.
+const isUniqueHeader = function (header, index, headers) {
+  return !headers.slice(index + 1).some((otherHeader) => isDeepStrictEqual(header, otherHeader))
 }
 
 module.exports = { mergeHeaders }
