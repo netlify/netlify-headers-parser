@@ -15,14 +15,23 @@ const { inspect, isDeepStrictEqual } = require('util')
 //  - The same path is specified twice in `_headers`, the behavior is the same
 //    as `netlify.toml` headers.
 const mergeHeaders = function ({ fileHeaders = [], configHeaders = [] }) {
-  validateArray(fileHeaders)
-  validateArray(configHeaders)
-  return [...fileHeaders, ...configHeaders].filter(isUniqueHeader)
+  const errors = validateArrays(fileHeaders, configHeaders)
+  if (errors.length !== 0) {
+    return { headers: [], errors }
+  }
+  const headers = [...fileHeaders, ...configHeaders].filter(isUniqueHeader)
+  return { headers, errors: [] }
+}
+
+const validateArrays = function (fileHeaders, configHeaders) {
+  const fileError = validateArray(fileHeaders)
+  const configError = validateArray(configHeaders)
+  return [fileError, configError].filter(Boolean)
 }
 
 const validateArray = function (headers) {
   if (!Array.isArray(headers)) {
-    throw new TypeError(`Headers should be an array: ${inspect(headers, { colors: false })}`)
+    return new TypeError(`Headers should be an array: ${inspect(headers, { colors: false })}`)
   }
 }
 
