@@ -37,12 +37,20 @@ each(
       output: [{ for: '/path', values: { test: 'one' } }],
     },
     {
+      title: 'trim_value_array',
+      output: [{ for: '/path', values: { test: 'one,two' } }],
+    },
+    {
       title: 'multiple_values',
       output: [{ for: '/path', values: { test: 'one,two' } }],
     },
     {
       title: 'values_undefined',
       output: [],
+    },
+    {
+      title: 'value_array',
+      output: [{ for: '/path', values: { test: 'one,two' } }],
     },
     {
       title: 'for_path_no_slash',
@@ -66,6 +74,7 @@ each(
     { title: 'invalid_values_object', errorMessage: /must be an object/ },
     { title: 'invalid_value_name', errorMessage: /Empty header name/ },
     { title: 'invalid_value_string', errorMessage: /must be a string/ },
+    { title: 'invalid_value_array', errorMessage: /must be a string/ },
   ],
   ({ title }, { fixtureName = title, errorMessage }) => {
     test(`Validate syntax errors | ${title}`, async (t) => {

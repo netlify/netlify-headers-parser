@@ -72,12 +72,20 @@ const normalizeValue = function (rawKey, rawValue) {
     throw new Error('Empty header name')
   }
 
-  if (typeof rawValue !== 'string') {
-    throw new TypeError(`Header "${key}" value must be a string not: ${rawValue}`)
+  const value = normalizeRawValue(key, rawValue)
+  return [key, value]
+}
+
+const normalizeRawValue = function (key, rawValue) {
+  if (typeof rawValue === 'string') {
+    return normalizeMultipleValues(normalizeStringValue(rawValue))
   }
 
-  const value = normalizeMultipleValues(rawValue.trim())
-  return [key, value]
+  if (Array.isArray(rawValue)) {
+    return rawValue.map((singleValue, index) => normalizeArrayItemValue(`${key}[${index}]`, singleValue)).join(',')
+  }
+
+  throw new TypeError(`Header "${key}" value must be a string not: ${rawValue}`)
 }
 
 // Multiple values can be specified by using whitespaces and commas.
@@ -100,5 +108,17 @@ const normalizeMultipleValues = function (value) {
 }
 
 const MULTIPLE_VALUES_REGEXP = /\s*,\s*/g
+
+const normalizeArrayItemValue = function (key, singleValue) {
+  if (typeof singleValue !== 'string') {
+    throw new TypeError(`Header "${key}" value must be a string not: ${singleValue}`)
+  }
+
+  return normalizeStringValue(singleValue)
+}
+
+const normalizeStringValue = function (stringValue) {
+  return stringValue.trim()
+}
 
 module.exports = { normalizeHeaders }
