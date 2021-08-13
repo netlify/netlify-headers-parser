@@ -6,19 +6,24 @@ const { splitResults, concatResults } = require('./results')
 
 // Parse all headers from `netlify.toml` and `_headers` file, then normalize
 // and validate those.
-const parseAllHeaders = async function ({ headersFiles = [], netlifyConfigPath } = {}) {
-  const [{ headers: fileHeaders, errors: fileParseErrors }, { headers: configHeaders, errors: configParseErrors }] =
-    await Promise.all([getFileHeaders(headersFiles), getConfigHeaders(netlifyConfigPath)])
+const parseAllHeaders = async function ({ headersFiles = [], netlifyConfigPath, configHeaders = [] } = {}) {
+  const [
+    { headers: fileHeaders, errors: fileParseErrors },
+    { headers: parsedConfigHeaders, errors: configParseErrors },
+  ] = await Promise.all([getFileHeaders(headersFiles), getConfigHeaders(netlifyConfigPath)])
   const { headers: normalizedFileHeaders, errors: fileNormalizeErrors } = normalizeHeaders(fileHeaders)
+  const { headers: normalizedConfigParseHeaders, errors: configParseNormalizeErrors } =
+    normalizeHeaders(parsedConfigHeaders)
   const { headers: normalizedConfigHeaders, errors: configNormalizeErrors } = normalizeHeaders(configHeaders)
   const { headers, errors: mergeErrors } = mergeHeaders({
     fileHeaders: normalizedFileHeaders,
-    configHeaders: normalizedConfigHeaders,
+    configHeaders: [...normalizedConfigParseHeaders, ...normalizedConfigHeaders],
   })
   const errors = [
     ...fileParseErrors,
     ...fileNormalizeErrors,
     ...configParseErrors,
+    ...configParseNormalizeErrors,
     ...configNormalizeErrors,
     ...mergeErrors,
   ]

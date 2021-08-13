@@ -5,16 +5,21 @@ const { parseAllHeaders } = require('..')
 
 const FIXTURES_DIR = `${__dirname}/fixtures`
 
-const parseHeaders = async function ({ fileFixtureNames, configFixtureName }) {
+const parseHeaders = async function ({ fileFixtureNames, configFixtureName, configHeaders }) {
   const headersFiles =
     fileFixtureNames === undefined
       ? undefined
       : fileFixtureNames.map((fileFixtureName) => `${FIXTURES_DIR}/headers_file/${fileFixtureName}`)
   const netlifyConfigPath =
     configFixtureName === undefined ? undefined : `${FIXTURES_DIR}/netlify_config/${configFixtureName}.toml`
-  const options =
-    headersFiles === undefined && netlifyConfigPath === undefined ? undefined : { headersFiles, netlifyConfigPath }
+  const options = getOptions({ headersFiles, netlifyConfigPath, configHeaders })
   return await parseAllHeaders(options)
+}
+
+const getOptions = function ({ headersFiles, netlifyConfigPath, configHeaders }) {
+  return headersFiles === undefined && netlifyConfigPath === undefined && configHeaders === undefined
+    ? undefined
+    : { headersFiles, netlifyConfigPath, configHeaders }
 }
 
 each(
@@ -46,6 +51,15 @@ each(
       ],
     },
     {
+      title: 'config_headers',
+      configFixtureName: 'success',
+      configHeaders: [{ for: '/path', values: { test: ' two ' } }],
+      output: [
+        { for: '/path', values: { test: 'one' } },
+        { for: '/path', values: { test: 'two' } },
+      ],
+    },
+    {
       title: 'duplicates',
       fileFixtureNames: ['duplicate'],
       configFixtureName: 'duplicate',
@@ -56,9 +70,9 @@ each(
       ],
     },
   ],
-  ({ title }, { fileFixtureNames, configFixtureName, output }) => {
+  ({ title }, { fileFixtureNames, configFixtureName, configHeaders, output }) => {
     test(`Parses netlify.toml and _headers | ${title}`, async (t) => {
-      const { headers, errors } = await parseHeaders({ fileFixtureNames, configFixtureName })
+      const { headers, errors } = await parseHeaders({ fileFixtureNames, configFixtureName, configHeaders })
       t.is(errors.length, 0)
       t.deepEqual(headers, output)
     })
