@@ -1,5 +1,7 @@
 const { inspect, isDeepStrictEqual } = require('util')
 
+const { splitResults } = require('./results')
+
 // Merge headers from `_headers` with the ones from `netlify.toml`.
 // When:
 //  - Both `netlify.toml` headers and `_headers` are specified, paths are
@@ -15,24 +17,16 @@ const { inspect, isDeepStrictEqual } = require('util')
 //  - The same path is specified twice in `_headers`, the behavior is the same
 //    as `netlify.toml` headers.
 const mergeHeaders = function ({ fileHeaders = [], configHeaders = [] }) {
-  const errors = validateArrays(fileHeaders, configHeaders)
-  if (errors.length !== 0) {
-    return { headers: [], errors }
-  }
-  const headers = [...fileHeaders, ...configHeaders].filter(isUniqueHeader)
-  return { headers, errors: [] }
-}
-
-const validateArrays = function (fileHeaders, configHeaders) {
-  const fileError = validateArray(fileHeaders)
-  const configError = validateArray(configHeaders)
-  return [fileError, configError].filter(Boolean)
+  const results = [...validateArray(fileHeaders), ...validateArray(configHeaders)]
+  const { headers, errors } = splitResults(results)
+  const mergedHeaders = headers.filter(isUniqueHeader)
+  return { headers: mergedHeaders, errors }
 }
 
 const validateArray = function (headers) {
-  if (!Array.isArray(headers)) {
-    return new TypeError(`Headers should be an array: ${inspect(headers, { colors: false })}`)
-  }
+  return Array.isArray(headers)
+    ? headers
+    : [new TypeError(`Headers should be an array: ${inspect(headers, { colors: false })}`)]
 }
 
 // Remove duplicates. This is especially likely considering `fileHeaders` might
