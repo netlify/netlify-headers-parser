@@ -1,7 +1,8 @@
 const test = require('ava')
 const { each } = require('test-each')
 
-const { parseConfigHeaders, normalizeHeaders } = require('..')
+const { parseConfigHeaders } = require('../src/netlify_config_parser')
+const { normalizeHeaders } = require('../src/normalize')
 
 const FIXTURES_DIR = `${__dirname}/fixtures`
 

@@ -6,7 +6,7 @@ const { splitResults, concatResults } = require('./results')
 
 // Parse all headers from `netlify.toml` and `_headers` file, then normalize
 // and validate those.
-const parseAllHeaders = async function ({ headersFiles = [], netlifyConfigPath, configHeaders = [] } = {}) {
+const parseAllHeaders = async function ({ headersFiles = [], netlifyConfigPath, configHeaders = [] }) {
   const [
     { headers: fileHeaders, errors: fileParseErrors },
     { headers: parsedConfigHeaders, errors: configParseErrors },
