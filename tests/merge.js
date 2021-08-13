@@ -1,11 +1,10 @@
 const test = require('ava')
 const { each } = require('test-each')
 
-const { mergeHeaders } = require('..')
+const { mergeHeaders } = require('../src/merge')
 
 each(
   [
-    { output: [] },
     { fileHeaders: [], configHeaders: [], output: [] },
     {
       fileHeaders: [
@@ -115,21 +114,6 @@ each(
       const { headers, errors } = await mergeHeaders({ fileHeaders, configHeaders })
       t.is(errors.length, 0)
       t.deepEqual(headers, output)
-    })
-  },
-)
-
-each(
-  [
-    { fileHeaders: { for: true }, errorMessage: /should be an array/ },
-    { configHeaders: { for: true }, errorMessage: /should be an array/ },
-  ],
-  ({ title }, { fileHeaders, configHeaders, errorMessage }) => {
-    test(`Validate syntax errors | ${title}`, async (t) => {
-      const { headers, errors } = await mergeHeaders({ fileHeaders, configHeaders })
-      t.is(headers.length, 0)
-      // eslint-disable-next-line max-nested-callbacks
-      t.true(errors.some((error) => errorMessage.test(error.message)))
     })
   },
 )

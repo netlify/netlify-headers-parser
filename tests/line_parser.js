@@ -1,7 +1,8 @@
 const test = require('ava')
 const { each } = require('test-each')
 
-const { parseFileHeaders, normalizeHeaders } = require('..')
+const { parseFileHeaders } = require('../src/line_parser')
+const { normalizeHeaders } = require('../src/normalize')
 
 const FIXTURES_DIR = `${__dirname}/fixtures`
 

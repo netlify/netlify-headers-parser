@@ -1,4 +1,4 @@
-const { inspect, isDeepStrictEqual } = require('util')
+const { isDeepStrictEqual } = require('util')
 
 const { splitResults } = require('./results')
 
@@ -16,17 +16,11 @@ const { splitResults } = require('./results')
 //    path, it is concatenated as a comma-separated list string.
 //  - The same path is specified twice in `_headers`, the behavior is the same
 //    as `netlify.toml` headers.
-const mergeHeaders = function ({ fileHeaders = [], configHeaders = [] }) {
-  const results = [...validateArray(fileHeaders), ...validateArray(configHeaders)]
+const mergeHeaders = function ({ fileHeaders, configHeaders }) {
+  const results = [...fileHeaders, ...configHeaders]
   const { headers, errors } = splitResults(results)
   const mergedHeaders = headers.filter(isUniqueHeader)
   return { headers: mergedHeaders, errors }
-}
-
-const validateArray = function (headers) {
-  return Array.isArray(headers)
-    ? headers
-    : [new TypeError(`Headers should be an array: ${inspect(headers, { colors: false })}`)]
 }
 
 // Remove duplicates. This is especially likely considering `fileHeaders` might

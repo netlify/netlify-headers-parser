@@ -12,14 +12,7 @@ const parseHeaders = async function ({ fileFixtureNames, configFixtureName, conf
       : fileFixtureNames.map((fileFixtureName) => `${FIXTURES_DIR}/headers_file/${fileFixtureName}`)
   const netlifyConfigPath =
     configFixtureName === undefined ? undefined : `${FIXTURES_DIR}/netlify_config/${configFixtureName}.toml`
-  const options = getOptions({ headersFiles, netlifyConfigPath, configHeaders })
-  return await parseAllHeaders(options)
-}
-
-const getOptions = function ({ headersFiles, netlifyConfigPath, configHeaders }) {
-  return headersFiles === undefined && netlifyConfigPath === undefined && configHeaders === undefined
-    ? undefined
-    : { headersFiles, netlifyConfigPath, configHeaders }
+  return await parseAllHeaders({ headersFiles, netlifyConfigPath, configHeaders })
 }
 
 each(
