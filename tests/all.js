@@ -1,34 +1,27 @@
 const test = require('ava')
 const { each } = require('test-each')
 
-const { parseAllHeaders } = require('..')
-
-const FIXTURES_DIR = `${__dirname}/fixtures`
-
-const parseHeaders = async function ({ fileFixtureNames, configFixtureName, configHeaders }) {
-  const headersFiles =
-    fileFixtureNames === undefined
-      ? undefined
-      : fileFixtureNames.map((fileFixtureName) => `${FIXTURES_DIR}/headers_file/${fileFixtureName}`)
-  const netlifyConfigPath =
-    configFixtureName === undefined ? undefined : `${FIXTURES_DIR}/netlify_config/${configFixtureName}.toml`
-  return await parseAllHeaders({ headersFiles, netlifyConfigPath, configHeaders })
-}
+const { validateSuccess, validateError } = require('./helpers/main')
 
 each(
   [
     {
       title: 'empty',
+      input: {},
       output: [],
     },
     {
       title: 'only_config',
-      configFixtureName: 'success',
+      input: {
+        netlifyConfigPath: 'success',
+      },
       output: [{ for: '/path', values: { test: 'one' } }],
     },
     {
       title: 'only_files',
-      fileFixtureNames: ['success', 'success_two'],
+      input: {
+        headersFiles: ['success', 'success_two'],
+      },
       output: [
         { for: '/path', values: { test: 'one' } },
         { for: '/path', values: { test: 'two' } },
@@ -36,8 +29,10 @@ each(
     },
     {
       title: 'both_config_files',
-      fileFixtureNames: ['success_two'],
-      configFixtureName: 'success',
+      input: {
+        headersFiles: ['success_two'],
+        netlifyConfigPath: 'success',
+      },
       output: [
         { for: '/path', values: { test: 'two' } },
         { for: '/path', values: { test: 'one' } },
@@ -45,8 +40,10 @@ each(
     },
     {
       title: 'config_headers',
-      configFixtureName: 'success',
-      configHeaders: [{ for: '/path', values: { test: ' two ' } }],
+      input: {
+        netlifyConfigPath: 'success',
+        configHeaders: [{ for: '/path', values: { test: ' two ' } }],
+      },
       output: [
         { for: '/path', values: { test: 'one' } },
         { for: '/path', values: { test: 'two' } },
@@ -54,20 +51,53 @@ each(
     },
     {
       title: 'duplicates',
-      fileFixtureNames: ['duplicate'],
-      configFixtureName: 'duplicate',
+      input: {
+        headersFiles: ['duplicate'],
+        netlifyConfigPath: 'duplicate',
+      },
       output: [
         { for: '/path', values: { test: 'three' } },
         { for: '/path', values: { test: 'one' } },
         { for: '/path', values: { test: 'two' } },
       ],
     },
+    {
+      title: 'invalid_mixed',
+      input: {
+        headersFiles: ['success'],
+        configHeaders: {},
+      },
+      output: [{ for: '/path', values: { test: 'one' } }],
+    },
   ],
-  ({ title }, { fileFixtureNames, configFixtureName, configHeaders, output }) => {
+  ({ title }, { output, input }) => {
     test(`Parses netlify.toml and _headers | ${title}`, async (t) => {
-      const { headers, errors } = await parseHeaders({ fileFixtureNames, configFixtureName, configHeaders })
-      t.is(errors.length, 0)
-      t.deepEqual(headers, output)
+      await validateSuccess(t, { input, output })
+    })
+  },
+)
+
+each(
+  [
+    {
+      title: 'invalid_config_headers_array',
+      input: {
+        configHeaders: {},
+      },
+      errorMessage: /must be an array/,
+    },
+    {
+      title: 'invalid_mixed',
+      input: {
+        headersFiles: ['simple'],
+        configHeaders: {},
+      },
+      errorMessage: /must be an array/,
+    },
+  ],
+  ({ title }, { errorMessage, input }) => {
+    test(`Validate syntax errors | ${title}`, async (t) => {
+      await validateError(t, { input, errorMessage })
     })
   },
 )
