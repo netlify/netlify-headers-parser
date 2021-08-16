@@ -48,11 +48,6 @@
     "files": [
       "tests/*.js"
     ],
-    "helpers": [
-      "tests/helpers/"
-    ],
-    "compileEnhancements": false,
-    "babel": false,
     "verbose": true
   },
   "husky": {
