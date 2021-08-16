@@ -1,28 +1,29 @@
 const isPlainObj = require('is-plain-obj')
 const mapObj = require('map-obj')
 
+const { getForRegExp } = require('./for_regexp')
 const { splitResults } = require('./results')
 
 // Validate and normalize an array of `headers` objects.
 // This step is performed after `headers` have been parsed from either
 // `netlify.toml` or `_headerss`.
-const normalizeHeaders = function (headers) {
+const normalizeHeaders = function (headers, minimal) {
   if (!Array.isArray(headers)) {
     const error = new TypeError(`Headers must be an array not: ${headers}`)
     return splitResults([error])
   }
 
-  const results = headers.map(parseHeader).filter(Boolean)
+  const results = headers.map((header, index) => parseHeader(header, index, minimal)).filter(Boolean)
   return splitResults(results)
 }
 
-const parseHeader = function (header, index) {
+const parseHeader = function (header, index, minimal) {
   if (!isPlainObj(header)) {
     return new TypeError(`Header must be an object not: ${header}`)
   }
 
   try {
-    return parseHeaderObject(header)
+    return parseHeaderObject(header, minimal)
   } catch (error) {
     return new Error(`Could not parse header number ${index + 1}:
   ${JSON.stringify(header)}
@@ -31,8 +32,8 @@ ${error.message}`)
 }
 
 // Parse a single `headers` object
-const parseHeaderObject = function ({ for: rawPath, values: rawValues }) {
-  const path = normalizePath(rawPath)
+const parseHeaderObject = function ({ for: rawPath, values: rawValues }, minimal) {
+  const forPath = normalizePath(rawPath)
 
   if (rawValues === undefined) {
     return
@@ -44,7 +45,11 @@ const parseHeaderObject = function ({ for: rawPath, values: rawValues }) {
     return
   }
 
-  return { for: path, values }
+  return {
+    for: forPath,
+    ...(minimal || { forRegExp: getForRegExp(forPath) }),
+    values,
+  }
 }
 
 // Normalize and validate the `for` field

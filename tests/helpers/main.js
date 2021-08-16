@@ -15,11 +15,14 @@ const validateError = async function (t, { input, errorMessage }) {
   t.true(errors.some((error) => errorMessage.test(error.message)))
 }
 
-const parseHeaders = async function ({ headersFiles, netlifyConfigPath, configHeaders }) {
+const parseHeaders = async function ({ headersFiles, netlifyConfigPath, configHeaders, ...input }) {
   return await parseAllHeaders({
     ...(headersFiles && { headersFiles: headersFiles.map(addFileFixtureDir) }),
     ...(netlifyConfigPath && { netlifyConfigPath: addConfigFixtureDir(netlifyConfigPath) }),
     configHeaders,
+    // Default `minimal` to `true` but still allows passing `undefined` to
+    // test the default value of that option
+    minimal: 'minimal' in input ? input.minimal : true,
   })
 }
 
