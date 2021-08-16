@@ -93,6 +93,13 @@ each(
 each(
   [
     {
+      title: 'invalid_dir',
+      input: {
+        headersFiles: ['invalid_dir'],
+      },
+      errorMessage: /read headers file/,
+    },
+    {
       title: 'invalid_value_name',
       input: {
         headersFiles: ['invalid_value_name'],

@@ -10,16 +10,31 @@ const readFileAsync = promisify(fs.readFile)
 // Parse `_headers` file to an array of objects following the same syntax as
 // the `headers` property in `netlify.toml`
 const parseFileHeaders = async function (headersFile) {
-  if (!(await pathExists(headersFile))) {
-    return splitResults([])
-  }
-
-  const text = await readFileAsync(headersFile, 'utf-8')
-  const results = text.split('\n').map(normalizeLine).filter(hasHeader).map(parseLine).filter(Boolean)
+  const results = await parseHeaders(headersFile)
   const { headers, errors: parseErrors } = splitResults(results)
   const { headers: reducedHeaders, errors: reducedErrors } = headers.reduce(reduceLine, { headers: [], errors: [] })
   const errors = [...parseErrors, ...reducedErrors]
   return { headers: reducedHeaders, errors }
+}
+
+const parseHeaders = async function (headersFile) {
+  if (!(await pathExists(headersFile))) {
+    return []
+  }
+
+  const text = await readHeadersFile(headersFile)
+  if (typeof text !== 'string') {
+    return [text]
+  }
+  return text.split('\n').map(normalizeLine).filter(hasHeader).map(parseLine).filter(Boolean)
+}
+
+const readHeadersFile = async function (headersFile) {
+  try {
+    return await readFileAsync(headersFile, 'utf-8')
+  } catch (error) {
+    return new Error(`Could not read headers file: ${headersFile}`)
+  }
 }
 
 const normalizeLine = function (line, index) {
