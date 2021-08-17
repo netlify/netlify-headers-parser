@@ -91,7 +91,7 @@ const normalizeRawValue = function (key, rawValue) {
   }
 
   if (Array.isArray(rawValue)) {
-    return rawValue.map((singleValue, index) => normalizeArrayItemValue(`${key}[${index}]`, singleValue)).join(',')
+    return rawValue.map((singleValue, index) => normalizeArrayItemValue(`${key}[${index}]`, singleValue)).join(', ')
   }
 
   throw new TypeError(`Header "${key}" value must be a string not: ${rawValue}`)
@@ -111,9 +111,9 @@ const normalizeRawValue = function (key, rawValue) {
 //   [[headers]]
 //   for = "/*"
 //     [headers.values]
-// 	   cache-control = "max-age=0,no-cache,no-store,must-revalidate"
+// 	   cache-control = "max-age=0, no-cache, no-store, must-revalidate"
 const normalizeMultipleValues = function (value) {
-  return value.split(MULTIPLE_VALUES_REGEXP).join(',')
+  return value.split(MULTIPLE_VALUES_REGEXP).join(', ')
 }
 
 const MULTIPLE_VALUES_REGEXP = /\s*,\s*/g

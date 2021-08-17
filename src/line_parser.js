@@ -99,7 +99,7 @@ const reduceLine = function ({ headers, errors }, { path, name, value }) {
   const previousHeaders = headers.slice(0, -1)
   const currentHeader = headers[headers.length - 1]
   const { values } = currentHeader
-  const newValue = values[name] === undefined ? value : `${values[name]},${value}`
+  const newValue = values[name] === undefined ? value : `${values[name]}, ${value}`
   const newHeaders = [...previousHeaders, { ...currentHeader, values: { ...values, [name]: newValue } }]
   return { headers: newHeaders, errors }
 }

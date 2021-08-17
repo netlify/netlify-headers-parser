@@ -52,14 +52,14 @@ each(
       input: {
         netlifyConfigPath: 'trim_value_array',
       },
-      output: [{ for: '/path', values: { test: 'one,two' } }],
+      output: [{ for: '/path', values: { test: 'one, two' } }],
     },
     {
       title: 'multiple_values',
       input: {
         netlifyConfigPath: 'multiple_values',
       },
-      output: [{ for: '/path', values: { test: 'one,two' } }],
+      output: [{ for: '/path', values: { test: 'one, two' } }],
     },
     {
       title: 'values_undefined',
@@ -73,7 +73,7 @@ each(
       input: {
         netlifyConfigPath: 'value_array',
       },
-      output: [{ for: '/path', values: { test: 'one,two' } }],
+      output: [{ for: '/path', values: { test: 'one, two' } }],
     },
     {
       title: 'for_path_no_slash',

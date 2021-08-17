@@ -80,7 +80,7 @@ each(
       input: {
         headersFiles: ['multiple_values'],
       },
-      output: [{ for: '/path', values: { test: 'one,two' } }],
+      output: [{ for: '/path', values: { test: 'one, two' } }],
     },
   ],
   ({ title }, { output, input }) => {
