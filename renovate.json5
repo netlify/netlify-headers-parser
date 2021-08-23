@@ -7,6 +7,10 @@
     // Those cannot be upgraded until we drop support for Node 10 and
     // use ES modules
     {
+      matchPackageNames: ['escape-string-regexp'],
+      allowedVersions: '<5',
+    },
+    {
       matchPackageNames: ['is-plain-obj'],
       allowedVersions: '<4',
     },
