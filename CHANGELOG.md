@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.0.1](https://www.github.com/netlify/netlify-headers-parser/compare/v1.0.0...v1.0.1) (2021-09-20)
+
+
+### Bug Fixes
+
+* **deps:** update dependency map-obj to v4.3.0 ([f9bcce0](https://www.github.com/netlify/netlify-headers-parser/commit/f9bcce0c876f5acaaae46849c27a80d0db469721))
+
 ## 4.0.2 (2021-08-23)
 
 
