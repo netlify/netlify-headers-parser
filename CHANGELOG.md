@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://www.github.com/netlify/netlify-headers-parser/compare/v1.0.1...v2.0.0) (2021-11-25)
+
+
+### ⚠ BREAKING CHANGES
+
+* drop Node 10 support
+
+### Miscellaneous Chores
+
+* drop Node 10 support ([c1bef31](https://www.github.com/netlify/netlify-headers-parser/commit/c1bef31b529fa7df2451af6162f47eaba99efcf6))
+
 ### [1.0.1](https://www.github.com/netlify/netlify-headers-parser/compare/v1.0.0...v1.0.1) (2021-09-20)
 
 
