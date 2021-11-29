@@ -1,15 +1,15 @@
-const fs = require('fs')
-const { promisify } = require('util')
+import fs from 'fs'
+import { promisify } from 'util'
 
-const pathExists = require('path-exists')
+import pathExists from 'path-exists'
 
-const { splitResults } = require('./results')
+import { splitResults } from './results.js'
 
 const readFileAsync = promisify(fs.readFile)
 
 // Parse `_headers` file to an array of objects following the same syntax as
 // the `headers` property in `netlify.toml`
-const parseFileHeaders = async function (headersFile) {
+export const parseFileHeaders = async function (headersFile) {
   const results = await parseHeaders(headersFile)
   const { headers, errors: parseErrors } = splitResults(results)
   const { headers: reducedHeaders, errors: reducedErrors } = headers.reduce(reduceLine, { headers: [], errors: [] })
@@ -103,5 +103,3 @@ const reduceLine = function ({ headers, errors }, { path, name, value }) {
   const newHeaders = [...previousHeaders, { ...currentHeader, values: { ...values, [name]: newValue } }]
   return { headers: newHeaders, errors }
 }
-
-module.exports = { parseFileHeaders }

@@ -2,7 +2,9 @@
   "name": "netlify-headers-parser",
   "version": "5.0.0",
   "description": "Parses Netlify headers into a JavaScript object representation",
-  "main": "src/index.js",
+  "type": "module",
+  "exports": "./src/index.js",
+  "main": "./src/index.js",
   "scripts": {
     "prepublishOnly": "npm ci && npm test",
     "test": "run-s format test:dev",
@@ -18,8 +20,8 @@
     "format:fix:prettier": "cross-env-shell prettier --write $npm_package_config_prettier"
   },
   "config": {
-    "eslint": "--ignore-path .gitignore --cache --format=codeframe --max-warnings=0 \"*.{js,md}\" \"{src,tests}/**/*.js\"",
-    "prettier": "--ignore-path .gitignore --loglevel=warn \".github/**/*.{md,yml}\" \"*.{js,yml,json}\" \"{src,tests}/**/*.js\" \"!package-lock.json\" \"!CHANGELOG.md\""
+    "eslint": "--ignore-path .gitignore --cache --format=codeframe --max-warnings=0 \"*.{cjs,mjs,js,md}\" \"{src,tests}/**/*.{cjs,mjs,js}\"",
+    "prettier": "--ignore-path .gitignore --loglevel=warn \".github/**/*.{md,yml}\" \"*.{cjs,mjs,js,yml,json}\" \"{src,tests}/**/*.{cjs,mjs,js}\" \"!package-lock.json\" \"!CHANGELOG.md\""
   },
   "keywords": [
     "netlify"

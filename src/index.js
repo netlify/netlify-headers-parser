@@ -1,3 +1,1 @@
-const { parseAllHeaders } = require('./all')
-
-module.exports = { parseAllHeaders }
+export { parseAllHeaders } from './all.js'

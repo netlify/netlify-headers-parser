@@ -1,5 +1,5 @@
 // If one header fails to parse, we still try to return the other ones
-const splitResults = function (results) {
+export const splitResults = function (results) {
   const headers = results.filter((result) => !isError(result))
   const errors = results.filter(isError)
   return { headers, errors }
@@ -10,7 +10,7 @@ const isError = function (result) {
 }
 
 // Concatenate an array of `{ headers, erors }`
-const concatResults = function (resultsArrays) {
+export const concatResults = function (resultsArrays) {
   // eslint-disable-next-line unicorn/prefer-spread
   const headers = [].concat(...resultsArrays.map(getHeaders))
   // eslint-disable-next-line unicorn/prefer-spread
@@ -25,5 +25,3 @@ const getHeaders = function ({ headers }) {
 const getErrors = function ({ errors }) {
   return errors
 }
-
-module.exports = { splitResults, concatResults }
