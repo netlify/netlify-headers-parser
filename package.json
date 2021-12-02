@@ -1,6 +1,6 @@
 {
   "name": "netlify-headers-parser",
-  "version": "5.0.0",
+  "version": "3.0.0",
   "description": "Parses Netlify headers into a JavaScript object representation",
   "type": "module",
   "exports": "./src/index.js",
