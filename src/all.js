@@ -1,12 +1,17 @@
-const { parseFileHeaders } = require('./line_parser')
-const { mergeHeaders } = require('./merge')
-const { parseConfigHeaders } = require('./netlify_config_parser')
-const { normalizeHeaders } = require('./normalize')
-const { splitResults, concatResults } = require('./results')
+import { parseFileHeaders } from './line_parser.js'
+import { mergeHeaders } from './merge.js'
+import { parseConfigHeaders } from './netlify_config_parser.js'
+import { normalizeHeaders } from './normalize.js'
+import { splitResults, concatResults } from './results.js'
 
 // Parse all headers from `netlify.toml` and `_headers` file, then normalize
 // and validate those.
-const parseAllHeaders = async function ({ headersFiles = [], netlifyConfigPath, configHeaders = [], minimal = false }) {
+export const parseAllHeaders = async function ({
+  headersFiles = [],
+  netlifyConfigPath,
+  configHeaders = [],
+  minimal = false,
+}) {
   const [
     { headers: fileHeaders, errors: fileParseErrors },
     { headers: parsedConfigHeaders, errors: configParseErrors },
@@ -44,5 +49,3 @@ const getConfigHeaders = async function (netlifyConfigPath) {
 
   return await parseConfigHeaders(netlifyConfigPath)
 }
-
-module.exports = { parseAllHeaders }

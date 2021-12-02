@@ -1,6 +1,6 @@
-const { isDeepStrictEqual } = require('util')
+import { isDeepStrictEqual } from 'util'
 
-const { splitResults } = require('./results')
+import { splitResults } from './results.js'
 
 // Merge headers from `_headers` with the ones from `netlify.toml`.
 // When:
@@ -16,7 +16,7 @@ const { splitResults } = require('./results')
 //    path, it is concatenated as a comma-separated list string.
 //  - The same path is specified twice in `_headers`, the behavior is the same
 //    as `netlify.toml` headers.
-const mergeHeaders = function ({ fileHeaders, configHeaders }) {
+export const mergeHeaders = function ({ fileHeaders, configHeaders }) {
   const results = [...fileHeaders, ...configHeaders]
   const { headers, errors } = splitResults(results)
   const mergedHeaders = headers.filter(isUniqueHeader)
@@ -30,5 +30,3 @@ const mergeHeaders = function ({ fileHeaders, configHeaders }) {
 const isUniqueHeader = function (header, index, headers) {
   return !headers.slice(index + 1).some((otherHeader) => isDeepStrictEqual(header, otherHeader))
 }
-
-module.exports = { mergeHeaders }

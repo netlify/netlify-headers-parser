@@ -1,13 +1,13 @@
-const isPlainObj = require('is-plain-obj')
-const mapObj = require('map-obj')
+import isPlainObj from 'is-plain-obj'
+import mapObj from 'map-obj'
 
-const { getForRegExp } = require('./for_regexp')
-const { splitResults } = require('./results')
+import { getForRegExp } from './for_regexp.js'
+import { splitResults } from './results.js'
 
 // Validate and normalize an array of `headers` objects.
 // This step is performed after `headers` have been parsed from either
 // `netlify.toml` or `_headerss`.
-const normalizeHeaders = function (headers, minimal) {
+export const normalizeHeaders = function (headers, minimal) {
   if (!Array.isArray(headers)) {
     const error = new TypeError(`Headers must be an array not: ${headers}`)
     return splitResults([error])
@@ -129,5 +129,3 @@ const normalizeArrayItemValue = function (key, singleValue) {
 const normalizeStringValue = function (stringValue) {
   return stringValue.trim()
 }
-
-module.exports = { normalizeHeaders }

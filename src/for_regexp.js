@@ -1,9 +1,9 @@
 'use strict'
 
-const escapeStringRegExp = require('escape-string-regexp')
+import escapeStringRegExp from 'escape-string-regexp'
 
 // Retrieve `forRegExp` which is a `RegExp` used to match the `for` path
-const getForRegExp = function (forPath) {
+export const getForRegExp = function (forPath) {
   const pattern = forPath.split('/').map(trimString).filter(Boolean).map(getPartRegExp).join('/')
   return new RegExp(`^/${pattern}/?$`, 'iu')
 }
@@ -36,5 +36,3 @@ const getPartRegExp = function (part) {
 }
 
 const CATCH_ALL_CHAR_REGEXP = /\*/g
-
-module.exports = { getForRegExp }
