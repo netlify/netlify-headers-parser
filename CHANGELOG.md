@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.0.0](https://www.github.com/netlify/netlify-headers-parser/compare/v2.0.0...v3.0.0) (2021-12-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* use pure ES modules
+
+### Miscellaneous Chores
+
+* use pure ES modules ([0f9f634](https://www.github.com/netlify/netlify-headers-parser/commit/0f9f634cc3d8ad7e38d501d67242a649101a0e56))
+
 ## [2.0.0](https://www.github.com/netlify/netlify-headers-parser/compare/v1.0.1...v2.0.0) (2021-11-25)
 
 
