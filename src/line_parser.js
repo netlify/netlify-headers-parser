@@ -32,7 +32,7 @@ const parseHeaders = async function (headersFile) {
 const readHeadersFile = async function (headersFile) {
   try {
     return await readFileAsync(headersFile, 'utf-8')
-  } catch (error) {
+  } catch {
     return new Error(`Could not read headers file: ${headersFile}`)
   }
 }

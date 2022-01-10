@@ -11,10 +11,8 @@ const isError = function (result) {
 
 // Concatenate an array of `{ headers, erors }`
 export const concatResults = function (resultsArrays) {
-  // eslint-disable-next-line unicorn/prefer-spread
-  const headers = [].concat(...resultsArrays.map(getHeaders))
-  // eslint-disable-next-line unicorn/prefer-spread
-  const errors = [].concat(...resultsArrays.map(getErrors))
+  const headers = resultsArrays.flatMap(getHeaders)
+  const errors = resultsArrays.flatMap(getErrors)
   return { headers, errors }
 }
 
