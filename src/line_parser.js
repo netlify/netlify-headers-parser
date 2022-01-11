@@ -1,11 +1,8 @@
-import fs from 'fs'
-import { promisify } from 'util'
+import { promises as fs } from 'fs'
 
 import pathExists from 'path-exists'
 
 import { splitResults } from './results.js'
-
-const readFileAsync = promisify(fs.readFile)
 
 // Parse `_headers` file to an array of objects following the same syntax as
 // the `headers` property in `netlify.toml`
@@ -31,7 +28,7 @@ const parseHeaders = async function (headersFile) {
 
 const readHeadersFile = async function (headersFile) {
   try {
-    return await readFileAsync(headersFile, 'utf-8')
+    return await fs.readFile(headersFile, 'utf-8')
   } catch {
     return new Error(`Could not read headers file: ${headersFile}`)
   }
