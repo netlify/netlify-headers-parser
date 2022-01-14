@@ -1,5 +1,12 @@
 # Changelog
 
+### [3.0.1](https://github.com/netlify/netlify-headers-parser/compare/v3.0.0...v3.0.1) (2022-01-14)
+
+
+### Bug Fixes
+
+* fix linting errors ([18698b0](https://github.com/netlify/netlify-headers-parser/commit/18698b05ba9a67fd530a2ef8f580c27132d39e93))
+
 ## 6.0.0 (2021-12-02)
 
 
