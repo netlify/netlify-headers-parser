@@ -36,7 +36,7 @@
     "escape-string-regexp": "^4.0.0",
     "is-plain-obj": "^4.0.0",
     "map-obj": "^5.0.0",
-    "path-exists": "^4.0.0",
+    "path-exists": "^5.0.0",
     "toml": "^3.0.0"
   },
   "devDependencies": {
