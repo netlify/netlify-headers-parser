@@ -1,5 +1,15 @@
 # Changelog
 
+### [6.0.2](https://github.com/netlify/netlify-headers-parser/compare/v6.0.1...v6.0.2) (2022-02-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency escape-string-regexp to v5 ([b2b7858](https://github.com/netlify/netlify-headers-parser/commit/b2b78584169bc6f771767c3db3471e77f094bb59))
+* **deps:** update dependency is-plain-obj to v4 ([af2dbbc](https://github.com/netlify/netlify-headers-parser/commit/af2dbbcd877facb9b4477c8f515c34c89e1fa76c))
+* **deps:** update dependency map-obj to v5 ([533c5ff](https://github.com/netlify/netlify-headers-parser/commit/533c5ff0c4b00518ea870b76032a676e731e1ff8))
+* **deps:** update dependency path-exists to v5 ([f057c4f](https://github.com/netlify/netlify-headers-parser/commit/f057c4f148451bfbfe6e1caf3256647a1b125c3f))
+
 ## 6.0.0 (2021-12-02)
 
 
