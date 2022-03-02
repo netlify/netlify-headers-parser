@@ -53,7 +53,8 @@
     "files": [
       "tests/*.js"
     ],
-    "verbose": true
+    "verbose": true,
+    "workerThreads": false
   },
   "repository": {
     "type": "git",
