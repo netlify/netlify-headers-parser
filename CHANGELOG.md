@@ -1,5 +1,12 @@
 # Changelog
 
+### [6.0.3](https://github.com/netlify/netlify-headers-parser/compare/v6.0.2...v6.0.3) (2022-05-23)
+
+
+### Bug Fixes
+
+* **deps:** update dependency map-obj to v5.0.1 ([a030851](https://github.com/netlify/netlify-headers-parser/commit/a030851a7a8b15876b7e4103b0a6040bf3ebd69e))
+
 ### [6.0.2](https://github.com/netlify/netlify-headers-parser/compare/v6.0.1...v6.0.2) (2022-02-14)
 
 
