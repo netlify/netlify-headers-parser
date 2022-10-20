@@ -1,5 +1,14 @@
 # Changelog
 
+## [6.0.3](https://github.com/netlify/netlify-headers-parser/compare/v6.0.2...v6.0.3) (2022-09-19)
+
+
+### Bug Fixes
+
+* **deps:** update dependency is-plain-obj to v4.1.0 ([f10367f](https://github.com/netlify/netlify-headers-parser/commit/f10367f8bb8038b500c61a4f1c8b126dc99ffcb8))
+* **deps:** update dependency map-obj to v5.0.1 ([a030851](https://github.com/netlify/netlify-headers-parser/commit/a030851a7a8b15876b7e4103b0a6040bf3ebd69e))
+* **deps:** update dependency map-obj to v5.0.2 ([4afeb38](https://github.com/netlify/netlify-headers-parser/commit/4afeb386a322f3addcdea44af8ca44d5a9588f50))
+
 ### [6.0.2](https://github.com/netlify/netlify-headers-parser/compare/v6.0.1...v6.0.2) (2022-02-14)
 
 
